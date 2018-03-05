@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
 import Person from './Person/Person';
+import Validation from './Validation/Validation';
+import CharComponent from './CharComponent/CharComponent'; 
 
 class App extends Component {
 
@@ -10,7 +12,8 @@ class App extends Component {
       { id : 2, name : "Antonia", age : 32},
       { id : 3, name : "Maddie", age : 1}
     ],
-    showPerson : false
+    showPerson : false,
+    characters : null
   }
 
   nameChangedHandler = (event, id) => {
@@ -42,6 +45,18 @@ class App extends Component {
     this.setState({people : people})
   }
 
+  onChangeEventHandler = (event) =>{
+    this.setState({characters : event.target.value});
+  }
+
+  removeCharacter = (index) => {
+    debugger;
+    var chars = [...this.state.characters];
+    var newChars = chars.splice(index, 1);
+
+    this.setState({characters : newChars});
+  }
+
   render() {
 
     const style = {
@@ -68,10 +83,20 @@ class App extends Component {
     )
   }
 
+  let charsList = null;
+  if(this.state.characters){
+    charsList = this.state.characters.split('').map((c, index) => {
+      return <CharComponent key={index} letter={c} click={() => this.removeCharacter(index)} />
+    })
+  }
+
+
     return (
       <div className="App">
         <h1>Hi, I'm a React App</h1>
-        <p>This is a paragraph</p>
+        <input type="text" onChange={this.onChangeEventHandler.bind(this)} />  
+        <Validation length={this.state.characters === null ? 0 : this.state.characters.length} minLength="5"></Validation>
+        {charsList}
         <button style={style}  
           onClick={() => {this.togglePersonHandler()}}>Toggle People</button>
         {personList}
