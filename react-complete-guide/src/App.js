@@ -13,7 +13,7 @@ class App extends Component {
       { id : 3, name : "Maddie", age : 1}
     ],
     showPerson : false,
-    characters : null
+    characters : ''
   }
 
   nameChangedHandler = (event, id) => {
@@ -50,11 +50,8 @@ class App extends Component {
   }
 
   removeCharacter = (index) => {
-    debugger;
-    var chars = [...this.state.characters];
-    var newChars = chars.splice(index, 1);
-
-    this.setState({characters : newChars});
+    var chars = [...this.state.characters].splice(index, 1);;
+    this.setState({characters : chars});
   }
 
   render() {
@@ -84,7 +81,7 @@ class App extends Component {
   }
 
   let charsList = null;
-  if(this.state.characters){
+  if(this.state.characters && this.state.characters.length> 0){
     charsList = this.state.characters.split('').map((c, index) => {
       return <CharComponent key={index} letter={c} click={() => this.removeCharacter(index)} />
     })
@@ -94,7 +91,7 @@ class App extends Component {
     return (
       <div className="App">
         <h1>Hi, I'm a React App</h1>
-        <input type="text" onChange={this.onChangeEventHandler.bind(this)} />  
+        <input type="text" onChange={this.onChangeEventHandler.bind(this)} value={this.state.characters} />  
         <Validation length={this.state.characters === null ? 0 : this.state.characters.length} minLength="5"></Validation>
         {charsList}
         <button style={style}  
